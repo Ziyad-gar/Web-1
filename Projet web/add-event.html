@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Ajouter un Événement</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+
+      <header>
+        <div id="BlockLogo">
+          <!-- Logo et titre principal -->
+          <a href="index.html"><img id="logo" src="Pictures/logo.webp" alt="Logo du gestionnaire" width="50" height="50"></a>
+          <a href="index.html"><h1 id="text_1">Gestionnaire d'événements culturels</h1></a>
+          <p id="p_1">"L'expertise au service de la culture et des événements."</p>
+        </div>
+       
+        <nav class="nav_menu">
+          <ul>
+            <li><a href="index.html" class="nav_menu_item">Accueil</a></li>
+            <li><a href="events.html" class="nav_menu_item">Événements</a></li>
+            <li><a href="event-details.html" class="nav_menu_item">Détails</a></li>
+            <li><a href="add-event.html" class="nav_menu_item">Ajouter un événement</a></li>
+            <li><a href="stats.html" class="nav_menu_item">Statistiques</a></li>
+            <li><a href="contact.html" class="nav_menu_item">Contact</a></li>
+          </ul>
+        </nav>
+      </header>
+
+    <main class="eventsSection">
+      <h2 class="header2">Formulaire d'ajout d'événement</h2>
+      <form id="ajouterEvenementForm">
+        <label for="nomEvenement">Nom de l'Événement:</label>
+        <input type="text" id="nomEvenement" required>
+
+        <label for="dateEvenement">Date de l'Événement:</label>
+        <input type="datetime-local" id="dateEvenement" required>
+
+        <label for="lieuEvenement">Lieu de l'Événement:</label>
+        <input type="text" id="lieuEvenement" required>
+
+        <label for="typeEvenement">Type d'Événement:</label>
+        <input type="text" id="typeEvenement" required>
+
+        <label for="descriptionEvenement">Description:</label>
+        <textarea id="descriptionEvenement" required>Exemple: Un spectacle de danse folklorique avec des artistes traditionnels. Ce spectacle se déroule dans un lieu prestigieux et l'entrée est gratuite. Réservez vos places dès maintenant!</textarea>
+
+        <button type="submit">Ajouter l'Événement</button>
+      </form>
+
+      <p><a href="events.html">Voir les événements</a></p>
+    </main>
+
+      <!-- Pied de page -->
+  <footer class="main-footer">
+    <p>&copy; Tous droits réservés.</p>
+    <div class="social-links">
+      <a href="#">Facebook</a>
+      <a href="#">Instagram</a>
+      <a href="#">Twitter</a>
+    </div>
+  </footer>
+
+    <script>
+      // Soumission du formulaire - Ajouter un événement
+document.getElementById('ajouterEvenementForm').addEventListener('submit', function(e) {
+  e.preventDefault();  // Empêche l'envoi du formulaire par défaut
+
+  // Récupérer les détails de l'événement depuis le formulaire
+  const nom = document.getElementById('nomEvenement').value;
+  const date = document.getElementById('dateEvenement').value;
+  const lieu = document.getElementById('lieuEvenement').value;
+  const type = document.getElementById('typeEvenement').value;
+  const description = document.getElementById('descriptionEvenement').value;
+
+  // Créer l'objet événement
+  const evenement = {
+    nom,
+    date,
+    lieu,
+    type,
+    description
+  };
+
+  // Récupérer les événements existants depuis localStorage, ou une liste vide si aucun événement n'est trouvé
+  const evenements = JSON.parse(localStorage.getItem('evenements')) || [];
+
+  // Ajouter le nouvel événement à la liste
+  evenements.push(evenement);
+
+  // Sauvegarder la liste mise à jour dans localStorage
+  localStorage.setItem('evenements', JSON.stringify(evenements));
+
+  // Rediriger vers la page de la liste des événements
+  window.location.href = 'events.html';
+
+});
+
+    </script>
+  </body>
+</html>
+
+

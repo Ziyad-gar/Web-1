@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Liste des Événements</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <header>
+      <div id="BlockLogo">
+        <!-- Logo et titre principal -->
+        <a href="index.html"><img id="logo" src="Pictures/logo.webp" alt="Logo du gestionnaire" width="50" height="50"></a>
+        <a href="index.html"><h1 id="text_1">Gestionnaire d'événements culturels</h1></a>
+        <p id="p_1">"L'expertise au service de la culture et des événements."</p>
+      </div>
+     
+      <nav class="nav_menu">
+        <ul>
+          <li><a href="index.html" class="nav_menu_item">Accueil</a></li>
+          <li><a href="events.html" class="nav_menu_item">Événements</a></li>
+          <li><a href="event-details.html" class="nav_menu_item">Détails</a></li>
+          <li><a href="add-event.html" class="nav_menu_item">Ajouter un événement</a></li>
+          <li><a href="stats.html" class="nav_menu_item">Statistiques</a></li>
+          <li><a href="contact.html" class="nav_menu_item">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="eventsSection">
+      <h2 class="header2">Liste des événements</h2>
+      <div id="blocFiltre">
+        <label for="filtreDate">Filtrer par Date:</label>
+        <input type="date" id="filtreDate">
+      
+        <label for="filtreType">Filtrer par Type:</label>
+        <input type="text" id="filtreType" placeholder="Exemple: Musique">
+      
+        <button id="appliquerFiltre">Appliquer le filtre</button>
+      </div>
+
+      <table id="tableauEvenements">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Date</th>
+            <th>Lieu</th>
+            <th>Type</th>
+            <th>Détails</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Les lignes des événements seront ajoutées dynamiquement ici -->
+        </tbody>
+      </table>
+    </main>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Charger les événements depuis localStorage
+  const evenements = JSON.parse(localStorage.getItem('evenements')) || [];
+  const corpsTableau = document.querySelector('#tableauEvenements tbody');
+
+  // Fonction pour charger dynamiquement les événements
+  function chargerEvenements() {
+    corpsTableau.innerHTML = ''; // Effacer les lignes existantes
+
+    if (evenements.length === 0) {
+      const lignePlaceholder = document.createElement('tr');
+      lignePlaceholder.innerHTML = `<td colspan="6" style="text-align: center;">Aucun événement disponible.</td>`;
+      corpsTableau.appendChild(lignePlaceholder);
+    } else {
+      // Ajouter les événements à la table
+      evenements.forEach((evenement, index) => {
+        const ligne = document.createElement('tr');
+
+        ligne.innerHTML = `
+          <td>${evenement.nom}</td>
+          <td>${evenement.date}</td>
+          <td>${evenement.lieu}</td>
+          <td>${evenement.type}</td>
+          <td><button class="toggle-details">Afficher Détails</button></td>
+          <td><button class="delete-button">Supprimer</button></td>
+        `;
+
+        const ligneDetails = document.createElement('tr');
+        ligneDetails.classList.add('details-row');
+        ligneDetails.style.display = 'none';  // Initialement caché
+        ligneDetails.innerHTML = `
+          <td colspan="6">
+            <strong>Description:</strong> ${evenement.description}
+          </td>
+        `;
+
+        corpsTableau.appendChild(ligne);
+        corpsTableau.appendChild(ligneDetails);
+      });
+    }
+  }
+
+  // Fonction pour afficher/masquer les détails d'un événement
+  document.querySelector('#tableauEvenements').addEventListener('click', (e) => {
+    const cible = e.target;
+
+    if (cible.classList.contains('toggle-details')) {
+      const ligne = cible.closest('tr');
+      const ligneDetails = ligne.nextElementSibling;
+
+      if (ligneDetails && ligneDetails.classList.contains('details-row')) {
+        const estCache = ligneDetails.style.display === 'none' || !ligneDetails.style.display;
+        ligneDetails.style.display = estCache ? 'table-row' : 'none';
+        cible.textContent = estCache ? 'Masquer Détails' : 'Afficher Détails';
+      }
+    }
+
+    // Supprimer l'événement
+    if (cible.classList.contains('delete-button')) {
+      const ligne = cible.closest('tr');
+      const ligneDetails = ligne.nextElementSibling;
+
+      ligne.remove();
+      if (ligneDetails && ligneDetails.classList.contains('details-row')) {
+        ligneDetails.remove();
+      }
+
+      // Mettre à jour localStorage en supprimant l'événement
+      const indexEvenement = Array.from(corpsTableau.children).indexOf(ligne) / 2;  // Diviser par 2 pour obtenir l'index correct
+      evenements.splice(indexEvenement, 1);
+      localStorage.setItem('evenements', JSON.stringify(evenements));
+
+      alert('Événement supprimé avec succès !');
+    }
+  });
+
+  // Appliquer le filtre
+  document.getElementById('appliquerFiltre').addEventListener('click', function() {
+    const filtreDate = document.getElementById('filtreDate').value.toLowerCase();
+    const filtreType = document.getElementById('filtreType').value.toLowerCase();
+    const rows = document.querySelectorAll('#tableauEvenements tbody tr');
+  
+    rows.forEach(row => {
+      const eventDate = row.children[1]?.textContent.toLowerCase();
+      const eventType = row.children[3]?.textContent.toLowerCase();
+  
+      const matchesDate = !filtreDate || eventDate.includes(filtreDate);
+      const matchesType = !filtreType || eventType.includes(filtreType);
+  
+      row.style.display = matchesDate && matchesType ? '' : 'none'; // Montrer ou cacher les lignes
+    });
+  });
+
+  // Charger les événements lors du chargement de la page
+  chargerEvenements();
+});
+
+    </script>
+  </body>
+</html>

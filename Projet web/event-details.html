@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event details</title>
+    <!-- Préchargement des polices -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jaro:opsz@6..72&display=swap" rel="stylesheet">
+    <!-- Inclusion de la feuille de style CSS -->
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <header>
+      <div id="BlockLogo">
+        <!-- Logo et titre principal -->
+        <a href="index.html"><img id="logo" src="Pictures/logo.webp" alt="Logo du gestionnaire" width="50" height="50"></a>
+        <a href="index.html"><h1 id="text_1">Gestionnaire d'événements culturels</h1></a>
+        <p id="p_1">"L’expertise au service de la culture et des événements."</p>
+      </div>
+     
+      <nav class="nav_menu">
+        <ul>
+          <li><a href="index.html" class="nav_menu_item">Accueil</a></li>
+          <li><a href="events.html" class="nav_menu_item">Événements</a></li>
+          <li><a href="event-details.html" class="nav_menu_item">Détails</a></li>
+          <li><a href="add-event.html" class="nav_menu_item">Ajouter un événement</a></li>
+          <li><a href="stats.html" class="nav_menu_item">Statistiques</a></li>
+          <li><a href="contact.html" class="nav_menu_item">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main class="event-details-main">
+      <article class="event-card">
+
+        <section class="event-details">
+          <h3>Description de l'Événement</h3>
+          <p>Voici la description détaillée de l'événement. Ce texte peut inclure des informations sur le déroulement de l'événement, les artistes, les activités, etc. C'est un événement passionnant à ne pas manquer!</p>
+        </section>
+      
+        <section class="event-location">
+          <h3>Lieu de l'Événement</h3>
+          <p>Adresse: 123 Rue, Ville, Pays</p>
+        </section>
+      
+        <!-- Gallery -->
+        <section class="event-gallery">
+          <h3>Galerie d'Images</h3>
+          <div class="gallery">
+            <button class="prev-btn">◀</button>
+            <img src="Pictures/africa-patterned-design-african-background-600nw-2418508541.webp" alt="Image 1" class="active">
+            <img src="Pictures/book.jpeg" alt="Image 2">
+            <img src="Pictures/https___cdn.evbuc.com_images_910865443_2256936644363_1_original.jpg" alt="Image 3">
+            <button class="next-btn">▶</button>
+          </div>
+        </section>
+     
+        <button class="show-more">Afficher plus de détails</button>
+      
+        
+        <div class="event-full-details hidden">
+          <p>Plus d'informations sur l'événement...</p>
+        </div>
+      </article>
+    </main>
+  <!-- Pied de page -->
+  <footer class="main-footer">
+    <p>&copy; Tous droits réservés.</p>
+    <div class="social-links">
+      <a href="#">Facebook</a>
+      <a href="#">Instagram</a>
+      <a href="#">Twitter</a>
+    </div>
+  </footer>
+    <!-- Inclusion des scripts -->
+    <script>
+  // Toggle the full event details when "Show More" is clicked
+document.querySelector('.show-more').addEventListener('click', function() {
+  const details = document.querySelector('.event-full-details');
+  details.classList.toggle('hidden'); // Toggle visibility
+});
+
+// Initialisation de l'index de l'image courante
+let currentImageIndex = 0;
+
+// Sélectionner toutes les images dans la galerie
+const images = document.querySelectorAll('.event-gallery img');
+
+// Sélectionner les boutons précédent et suivant
+const prevButton = document.querySelector('.prev-btn');
+const nextButton = document.querySelector('.next-btn');
+
+// Fonction pour afficher l'image en fonction de l'index courant
+function showImage(index) {
+  images.forEach((img, i) => {
+    img.classList.remove('active'); // Supprimer la classe active de toutes les images
+    if (i === index) {
+      img.classList.add('active'); // Ajouter la classe active à l'image courante
+    }
+  });
+}
+
+// Écouteur d'événement pour le bouton précédent
+prevButton.addEventListener('click', () => {
+  currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; // Gérer le retour en boucle
+  showImage(currentImageIndex); // Afficher la nouvelle image
+});
+
+// Écouteur d'événement pour le bouton suivant
+nextButton.addEventListener('click', () => {
+  currentImageIndex = (currentImageIndex + 1) % images.length; // Gérer le retour en boucle
+  showImage(currentImageIndex); // Afficher la nouvelle image
+});
+
+// Afficher initialement la première image
+showImage(currentImageIndex);
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact et Graphique des Événements</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jaro:opsz@6..72&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+form {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #fff;
+}
+
+form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+form input, form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+form .buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+form button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007BFF;
+  color: white;
+  cursor: pointer;
+}
+
+form button[type="reset"] {
+  background-color: #6c757d;
+}
+
+form button:hover {
+  opacity: 0.9;
+}
+
+
+.chart-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+@media (max-width: 600px) {
+  form {
+    padding: 15px;
+  }
+
+  form .buttons {
+    flex-direction: column;
+  }
+
+  form button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .chart-container {
+    width: 100%;
+    padding: 15px;
+  }
+}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <header>
+    <div id="BlockLogo">
+      <a href="index.html"><img id="logo" src="Pictures/logo.webp" alt="Logo du gestionnaire" width="50" height="50"></a>
+      <a href="index.html"><h1 id="text_1">Gestionnaire d'événements culturels</h1></a>
+      <p id="p_1">"L'expertise au service de la culture et des événements."</p>
+    </div>
+
+    <nav class="nav_menu">
+      <ul>
+        <li><a href="index.html" class="nav_menu_item">Accueil</a></li>
+        <li><a href="events.html" class="nav_menu_item">Événements</a></li>
+        <li><a href="event-details.html" class="nav_menu_item">Détails</a></li>
+        <li><a href="add-event.html" class="nav_menu_item">Ajouter un événement</a></li>
+        <li><a href="stats.html" class="nav_menu_item">Statistiques</a></li>
+        <li><a href="contact.html" class="nav_menu_item">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <form id="event-form">
+    <label for="category">Catégorie d'événement :</label>
+    <select id="category" name="category">
+      <option value="concert">Concert</option>
+      <option value="conference">Conférence</option>
+      <option value="workshop">Atelier</option>
+      <option value="exhibition">Exposition</option>
+    </select>
+
+    <label for="name">Nom de l'événement :</label>
+    <input type="text" id="name" name="name" required />
+
+    <div class="buttons">
+      <button type="submit">Ajouter</button>
+      <button type="reset">Réinitialiser</button>
+    </div>
+  </form>
+
+  <div class="chart-container">
+    <canvas id="eventChart"></canvas>
+  </div>
+
+   <!-- Pied de page -->
+   <footer class="main-footer">
+    <p>&copy; Tous droits réservés.</p>
+    <div class="social-links">
+      <a href="#">Facebook</a>
+      <a href="#">Instagram</a>
+      <a href="#">Twitter</a>
+    </div>
+  </footer>
+
+  <script>
+    const ctx = document.getElementById('eventChart').getContext('2d');
+    let eventData = {
+      concert: 0,
+      conference: 0,
+      workshop: 0,
+      exhibition: 0,
+    };
+
+    const eventChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Concert', 'Conférence', 'Atelier', 'Exposition'],
+        datasets: [{
+          label: 'Nombre d\'événements par catégorie',
+          data: [eventData.concert, eventData.conference, eventData.workshop, eventData.exhibition],
+          backgroundColor: ['#ff5733', '#33b5ff', '#33cc33', '#ffcc33'],
+          borderColor: ['#e74c3c', '#2196f3', '#2ecc71', '#f39c12'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    document.getElementById('event-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const category = document.getElementById('category').value;
+
+      eventData[category]++;
+      
+      eventChart.data.datasets[0].data = [
+        eventData.concert,
+        eventData.conference,
+        eventData.workshop,
+        eventData.exhibition
+      ];
+
+      eventChart.update();
+    });
+  </script>
+
+</body>
+</html>
